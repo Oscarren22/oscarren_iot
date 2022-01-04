@@ -13,7 +13,7 @@ PATH_TO_CERTIFICATE = "certificates/ee341dcae883557b925830d79025546762fa5afe2401
 PATH_TO_PRIVATE_KEY = "certificates/ee341dcae883557b925830d79025546762fa5afe2401be38ad24dd8e5b4ac16e-private.pem.key"
 PATH_TO_AMAZON_ROOT_CA_1 = "certificates/AmazonRootCA1.pem"
 MESSAGE = "Hello World"
-TOPIC = "test/testing"
+TOPIC = CLIENT_ID+"/test/testing"
 RANGE = 20
 
 # Spin up resources
@@ -28,7 +28,7 @@ mqtt_connection = mqtt_connection_builder.mtls_from_path(
             ca_filepath=PATH_TO_AMAZON_ROOT_CA_1,
             client_id=CLIENT_ID,
             clean_session=False,
-            keep_alive_secs=6
+            keep_alive_secs=60
             )
 print("Connecting to {} with client ID '{}'...".format(
         ENDPOINT, CLIENT_ID))
@@ -43,7 +43,7 @@ for i in range (RANGE):
     data = "{} [{}]".format(MESSAGE, i+1)
     message = {"message" : data}
     mqtt_connection.publish(topic=TOPIC, payload=json.dumps(message), qos=mqtt.QoS.AT_LEAST_ONCE)
-    print("Published: '" + json.dumps(message) + "' to the topic: " + "'test/testing'")
+    print("Published: '" + json.dumps(message) + "' to the topic: " + "'"+TOPIC+"'")
     t.sleep(0.1)
 print('Publish End')
 disconnect_future = mqtt_connection.disconnect()
