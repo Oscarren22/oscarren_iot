@@ -5,6 +5,7 @@ from awscrt import io, mqtt, auth, http
 from awsiot import mqtt_connection_builder
 import time as t
 import json
+import lgpio
 
 # Define ENDPOINT, CLIENT_ID, PATH_TO_CERTIFICATE, PATH_TO_PRIVATE_KEY, PATH_TO_AMAZON_ROOT_CA_1, MESSAGE, TOPIC, and RANGE
 ENDPOINT = "a3avlymt7wvdf2-ats.iot.us-east-1.amazonaws.com"
@@ -15,6 +16,10 @@ PATH_TO_AMAZON_ROOT_CA_1 = "certificates/AmazonRootCA1.pem"
 MESSAGE = "Hello World"
 TOPIC = CLIENT_ID+"/test/testing"
 RANGE = 20
+
+LED = 23
+h = lgpio.gpiochip_open(0)
+lgpio.gpio_claim_output(h, LED)
 
 # Spin up resources
 event_loop_group = io.EventLoopGroup(1)
